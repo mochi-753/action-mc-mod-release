@@ -4,12 +4,11 @@ export type ReleaseMetadata = {
     releaseType: 'release' | 'beta' | 'alpha';
     gameVersions: string[];
     loaders: string[];
+    side: string[]
 
     curseforge?: {
         changelogType: 'text' | 'html' | 'markdown';
-        parentFileID?: number;
         gameVersions: number[];
-        gameVersionNames: string[];
         isMarkedForManualRelease?: boolean;
         relations?: {
             projects: object[];

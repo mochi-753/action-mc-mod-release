@@ -3,6 +3,9 @@ import type {ReleaseMetadata} from "../releaseMetadata.js";
 import type {CurseForgeClient} from "./curseForgeClient.js";
 import type {CurseForgeRequest} from "./curseforgeRequest.js";
 import type {Artifact} from "../buildArtifact.js";
+import {normalize} from "./curseforgeNormalizer.js";
+import {info} from "@actions/core";
+import {createChangelogConverter} from "../../changelog/converter/index.js";
 
 export class CurseForgePublisher implements Publisher {
     constructor(private client: CurseForgeClient) {
@@ -17,7 +20,7 @@ export class CurseForgePublisher implements Publisher {
             changelog: metadata.changelog,
             changelogType: metadata.curseforge.changelogType,
             displayName: metadata.name,
-            gameVersionNames: metadata.curseforge.gameVersionNames,
+            gameVersionNames: [],
             gameVersions: [],
             releaseType: metadata.releaseType,
             projectID: metadata.curseforge.projectID
@@ -26,17 +29,30 @@ export class CurseForgePublisher implements Publisher {
         const gameVersionSlugs: string[] = metadata.gameVersions.map(s => s.toLowerCase().replace(/\./g, '-'))
         curseforgeRequest.gameVersions = await this.client.fetchGameVersions({slugs: gameVersionSlugs})
 
+        const gameVersionNames: string[] = []
+        metadata.side.map(s => normalize(s)).forEach(s => gameVersionNames.push(s))
+        metadata.loaders.map(s => normalize(s)).forEach(s => gameVersionNames.push(s))
+        metadata.gameVersions.forEach(s => gameVersionNames.push(s))
+
         if (metadata.curseforge.isMarkedForManualRelease) {
             Object.assign(curseforgeRequest, {isMarkedForManualRelease: metadata.curseforge.isMarkedForManualRelease})
-        }
-
-        if (metadata.curseforge.parentFileID !== undefined) {
-            Object.assign(curseforgeRequest, {parentFileID: metadata.curseforge.parentFileID})
         }
 
         if (metadata.curseforge.relations) {
             Object.assign(curseforgeRequest, {relations: metadata.curseforge.relations})
         }
+
+        if (curseforgeRequest.changelogType === 'markdown') {
+            const changelogConverter = createChangelogConverter({
+                rawChangelog: curseforgeRequest.changelog,
+                convertMode: 'MarkdownToHtml'
+            })
+
+            curseforgeRequest.changelogType = 'html'
+            curseforgeRequest.changelog = await changelogConverter.convert()
+        }
+
+        info(`[CurseForge] Generated metadata: ${JSON.stringify(curseforgeRequest)}`)
 
         try {
             await Promise.all(
