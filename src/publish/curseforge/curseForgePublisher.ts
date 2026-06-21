@@ -18,16 +18,19 @@ export class CurseForgePublisher implements Publisher {
             changelogType: metadata.curseforge.changelogType,
             displayName: metadata.name,
             gameVersionNames: metadata.curseforge.gameVersionNames,
-            gameVersions: metadata.curseforge.gameVersions,
+            gameVersions: [],
             releaseType: metadata.releaseType,
             projectID: metadata.curseforge.projectID
         }
+
+        const gameVersionSlugs: string[] = metadata.gameVersions.map(s => s.toLowerCase().replace(/\./g, '-'))
+        curseforgeRequest.gameVersions = await this.client.fetchGameVersions({slugs: gameVersionSlugs})
 
         if (metadata.curseforge.isMarkedForManualRelease) {
             Object.assign(curseforgeRequest, {isMarkedForManualRelease: metadata.curseforge.isMarkedForManualRelease})
         }
 
-        if (metadata.curseforge.parentFileID) {
+        if (metadata.curseforge.parentFileID !== undefined) {
             Object.assign(curseforgeRequest, {parentFileID: metadata.curseforge.parentFileID})
         }
 
@@ -36,11 +39,11 @@ export class CurseForgePublisher implements Publisher {
         }
 
         try {
-            for (const artifact of artifacts) {
-                await this.client.uploadFile({file: artifact, req: curseforgeRequest})
-            }
+            await Promise.all(
+                artifacts.map(artifact => this.client.uploadFile({file: artifact, req: curseforgeRequest}))
+            )
         } catch (e) {
-            throw new Error(`Failed to create CurseForge Release.`)
+            throw new Error(`Failed to create CurseForge Release: ${String(e)}`)
         }
     }
 }

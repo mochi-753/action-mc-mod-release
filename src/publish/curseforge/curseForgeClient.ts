@@ -15,7 +15,7 @@ export class CurseForgeClient {
             {
                 method: 'POST',
                 headers: {
-                    'User-Agent': this.userAgent !== undefined ? this.userAgent : '',
+                    'User-Agent': this.userAgent ?? '',
                     'X-Api-Token': this.token
                 },
                 body: formData as any
@@ -25,5 +25,41 @@ export class CurseForgeClient {
         if (!response.ok) {
             throw new Error(`Failed to create CurseForge Release. ${response.status} ${response.statusText} - ${await response.text()}`)
         }
+    }
+
+    async fetchGameVersions(params: { slugs: string[] }): Promise<number[]> {
+        const response = await fetch(
+            `${this.baseURL}/game/versions`,
+            {
+                method: 'GET',
+                headers: {
+                    'User-Agent': this.userAgent ?? '',
+                    'X-Api-Token': this.token
+                }
+            }
+        )
+
+        const responseJson: Array<{
+            id: number;
+            slug: string;
+            apiVersion: string | null;
+        }> = await response.json()
+
+        const map = new Map<string, number>()
+        for (const x of responseJson) {
+            if (x.apiVersion == null) {
+                map.set(x.slug, x.id)
+            }
+        }
+
+        const result: number[] = []
+        for (const slug of params.slugs) {
+            const id = map.get(slug)
+            if (id !== undefined) {
+                result.push(id)
+            }
+        }
+
+        return result
     }
 }

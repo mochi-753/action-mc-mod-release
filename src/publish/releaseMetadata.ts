@@ -2,6 +2,8 @@ export type ReleaseMetadata = {
     name: string;
     changelog: string;
     releaseType: 'release' | 'beta' | 'alpha';
+    gameVersions: string[];
+    loaders: string[];
 
     curseforge?: {
         changelogType: 'text' | 'html' | 'markdown';
@@ -19,8 +21,6 @@ export type ReleaseMetadata = {
     modrinth?: {
         versionNumber: string;
         dependencies: object[];
-        gameVersions: string[];
-        loaders: string[];
         featured: boolean;
         fileParts: string[];
         primaryFile: string;

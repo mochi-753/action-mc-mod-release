@@ -24,14 +24,18 @@ async function parseInputs(): Promise<ReleaseMetadata> {
     const loaders = getMultilineInput('loaders')
     const side = getMultilineInput('side')
     const manualRelease = getBooleanInput('manual_release')
-    // const curseforgeDependencies = TODO: あとでやる
+    const curseforgeDependencies = undefined // TODO: あとでやる
     const curseforgeProjectID = getInput('curseforge_project_id')
     const curseforgeToken = getInput('curseforge_token')
-    // const modrinthDependencies = TODO: あとでやる
+    const modrinthDependencies = undefined // TODO: あとでやる
     const modrinthProjectID = getInput('modrinth_project_id')
     const modrinthToken = getInput('modrinth_token')
 
     return {
+        curseforge: {changelogType: 'markdown', gameVersionNames: [], gameVersions: [], projectID: ""},
+        gameVersions: [],
+        loaders: [],
+        modrinth: {dependencies: [], featured: false, fileParts: [], primaryFile: "", projectID: "", versionNumber: ""},
         changelog: "", name: "", releaseType: 'release'
     };
 }
