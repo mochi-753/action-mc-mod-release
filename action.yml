@@ -1,0 +1,75 @@
+name: 'MC Mod Release'
+
+description: 'GitHub Action for creating CurseForge/Modrinth Releases.'
+
+author: 'Mochi753'
+
+inputs:
+  change_log:
+    description: 'The contents of the changelog provided to CurseForge and Modrinth.'
+    required: false
+  change_log_path:
+    description: 'The path where the changelogs provided to CurseForge and Modrinth are stored.'
+    required: false
+  change_log_type:
+    description: 'The format used for changelogs on CurseForge. You can specify "text", "HTML", or "Markdown".'
+    required: false
+    default: 'text'
+  name:
+    description: 'The actual names of the mods as they appear on the CurseForge and Modrinth websites.'
+    required: true
+  version_number:
+    description: 'The mod version number displayed in Modrinth.'
+    required: false
+  release_type:
+    description: 'Mod release types. You can specify “release”, “beta” or “alpha”.'
+    required: false
+    default: 'release'
+  mc_versions:
+    description: 'A list of Minecraft versions supported by the mod. You can select multiple versions.'
+    required: true
+  loaders:
+    description: 'A list of mod loaders supported by this mod. If the mod supports multiple loaders, you can specify more than one.'
+    required: true
+  side:
+    description: 'The logical side supported by the mod. You can specify either “client” or “server”, or both.'
+    required: true
+    default: |
+      client
+      server
+  manual_release:
+    description: 'When releasing on CurseForge, whether the author manually publishes the release. Specified as a boolean.'
+    required: false
+    default: 'false'
+  curseforge_dependencies:
+    description: 'Mod dependencies on CurseForge. They must follow a specific format.'
+    required: false
+  curseforge_dependencies_path:
+    description: 'The path to the file containing the mod dependencies on CurseForge (we recommend a JSON file). They must follow a specific format.'
+    required: false
+  curseforge_project_id:
+    description: 'Project ID on CurseForge. If this value is set, the release feature to CurseForge will be automatically enabled.'
+    required: false
+  curseforge_token:
+    description: 'CurseForge API token. You can also set this using the “CURSEFORGE_TOKEN” environment variable.'
+    required: false
+  modrinth_dependencies:
+    description: 'Mod dependencies on Modrinth. They must follow a specific format.'
+    required: false
+  modrinth_dependencies_path:
+    description: 'The path to the file containing the mod dependencies on Modrinth (we recommend a JSON file). They must follow a specific format.'
+    required: false
+  modrinth_project_id:
+    description: 'Project ID on Modrinth. If this value is set, the release feature to Modrinth will be automatically enabled.'
+    required: false
+  modrinth_token:
+    description: 'Modrinth API token. You can also set this using the “MODRINTH_TOKEN” environment variable.'
+    required: false
+
+runs:
+  using: 'node24'
+  main: 'dist/index.js'
+
+branding:
+  color: 'white'
+  icon: 'package'
