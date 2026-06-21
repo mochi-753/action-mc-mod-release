@@ -1,0 +1,36 @@
+name: Update CurseForge GameVersions json
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 22 * * *
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    name: Update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.0
+
+      - name: Call the CurseForge API
+        run: |
+          curl -H 'X-Api-Token: ${{ secrets.CURSEFORGE_TOKEN }}' https://minecraft.curseforge.com/api/game/versions > res_raw.json
+          cat res_raw.json | jq -c 'map(select(.apiVersion == null))' > res.json
+
+      - name: Push changes
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@noreply.github.com"
+          
+          git add res.json
+          git commit -m "Update the JSON file used by the CurseForge API"
+          git push -u origin main
