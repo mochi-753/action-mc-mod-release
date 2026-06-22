@@ -1,4 +1,4 @@
-import type {ChangelogLoaderStrategy} from "./strategy.js";
+import type { ChangelogLoaderStrategy } from "./strategy.js";
 
 export class DirectChangelogStrategy implements ChangelogLoaderStrategy {
     constructor(private changelog: string) {

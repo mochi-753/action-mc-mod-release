@@ -1,11 +1,11 @@
-import type {Publisher} from "../publisher.js";
-import type {ReleaseMetadata} from "../releaseMetadata.js";
-import type {CurseForgeClient} from "./curseForgeClient.js";
-import type {CurseForgeRequest} from "./curseforgeRequest.js";
-import type {Artifact} from "../buildArtifact.js";
-import {normalize} from "./curseforgeNormalizer.js";
-import {info} from "@actions/core";
-import {createChangelogConverterStrategy} from "../../changelog/converter/index.js";
+import type { Publisher } from "../publisher.js";
+import type { ReleaseMetadata } from "../releaseMetadata.js";
+import type { CurseForgeClient } from "./curseForgeClient.js";
+import type { CurseForgeRequest } from "./curseforgeRequest.js";
+import type { Artifact } from "../buildArtifact.js";
+import { normalize } from "./curseforgeNormalizer.js";
+import { info } from "@actions/core";
+import { createChangelogConverterStrategy } from "../../changelog/converter/index.js";
 
 export class CurseForgePublisher implements Publisher {
     constructor(private client: CurseForgeClient) {
@@ -27,7 +27,7 @@ export class CurseForgePublisher implements Publisher {
         }
 
         const gameVersionSlugs: string[] = metadata.gameVersions.map(s => s.toLowerCase().replace(/\./g, '-'))
-        curseforgeRequest.gameVersions = await this.client.fetchGameVersions({slugs: gameVersionSlugs})
+        curseforgeRequest.gameVersions = await this.client.fetchGameVersions({ slugs: gameVersionSlugs })
 
         const gameVersionNames: string[] = []
         metadata.side.map(s => normalize(s)).forEach(s => gameVersionNames.push(s))
@@ -35,11 +35,11 @@ export class CurseForgePublisher implements Publisher {
         metadata.gameVersions.forEach(s => gameVersionNames.push(s))
 
         if (metadata.curseforge.isMarkedForManualRelease) {
-            Object.assign(curseforgeRequest, {isMarkedForManualRelease: metadata.curseforge.isMarkedForManualRelease})
+            Object.assign(curseforgeRequest, { isMarkedForManualRelease: metadata.curseforge.isMarkedForManualRelease })
         }
 
         if (metadata.curseforge.relations) {
-            Object.assign(curseforgeRequest, {relations: metadata.curseforge.relations})
+            Object.assign(curseforgeRequest, { relations: metadata.curseforge.relations })
         }
 
         if (curseforgeRequest.changelogType === 'markdown') {
@@ -56,7 +56,7 @@ export class CurseForgePublisher implements Publisher {
 
         try {
             await Promise.all(
-                artifacts.map(artifact => this.client.uploadFile({file: artifact, req: curseforgeRequest}))
+                artifacts.map(artifact => this.client.uploadFile({ file: artifact, req: curseforgeRequest }))
             )
         } catch (e) {
             throw new Error(`Failed to create CurseForge Release: ${String(e)}`)

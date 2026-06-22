@@ -1,6 +1,6 @@
-import {getBooleanInput, getInput, getMultilineInput} from "@actions/core"
-import type {ReleaseMetadata} from "./publish/releaseMetadata.js";
-import {createChangelogStrategy} from "./changelog/loader/index.js";
+import { getBooleanInput, getInput, getMultilineInput } from "@actions/core"
+import type { ReleaseMetadata } from "./publish/releaseMetadata.js";
+import { createChangelogStrategy } from "./changelog/loader/index.js";
 
 export async function main(): Promise<void> {
 }
@@ -16,9 +16,7 @@ async function parseInputs(): Promise<ReleaseMetadata> {
     const versionNumber = getInput('version_number')
     const releaseType = getInput('release_type')
     const normalizedReleaseType =
-        releaseType === 'release' || releaseType === 'beta' || releaseType === 'alpha'
-            ? releaseType
-            : 'release'
+        releaseType === 'release' || releaseType === 'beta' || releaseType === 'alpha' ? releaseType : 'release'
     const mcVersions = getMultilineInput('mc_versions')
     const loaders = getMultilineInput('loaders')
     const side = getMultilineInput('side')
@@ -50,10 +48,10 @@ async function parseInputs(): Promise<ReleaseMetadata> {
         }
 
         if (curseforgeDependencies && curseforgeDependencies.trim().length > 0) {
-            Object.assign(curseforgeMetadata, {curseforgeDependencies})
+            Object.assign(curseforgeMetadata, { curseforgeDependencies })
         }
 
-        Object.assign(result, {curseforgeMetadata})
+        Object.assign(result, { curseforgeMetadata })
     }
 
     return result

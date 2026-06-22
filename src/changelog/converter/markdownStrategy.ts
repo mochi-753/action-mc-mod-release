@@ -1,5 +1,5 @@
-import type {ChangelogConverterStrategy} from "./strategy.js";
-import {marked} from "marked";
+import type { ChangelogConverterStrategy } from "./strategy.js";
+import { marked } from "marked";
 
 export class MarkdownChangelogConverterStrategy implements ChangelogConverterStrategy {
     constructor(private changelog: string) {

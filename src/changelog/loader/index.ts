@@ -1,6 +1,6 @@
-import type {ChangelogLoaderStrategy} from "./strategy.js";
-import {DirectChangelogStrategy} from "./directStrategy.js";
-import {FileChangelogStrategy} from "./fileStrategy.js";
+import type { ChangelogLoaderStrategy } from "./strategy.js";
+import { DirectChangelogStrategy } from "./directStrategy.js";
+import { FileChangelogStrategy } from "./fileStrategy.js";
 
 export function createChangelogLoaderStrategy(inputs: { changelog?: string, path?: string }): ChangelogLoaderStrategy {
     if (inputs.changelog && inputs.changelog.trim().length > 0) {
