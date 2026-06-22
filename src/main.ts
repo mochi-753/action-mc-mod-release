@@ -1,17 +1,17 @@
 import { getBooleanInput, getInput, getMultilineInput } from "@actions/core"
 import type { ReleaseMetadata } from "./publish/releaseMetadata.js";
-import { createChangelogStrategy } from "./changelog/loader/index.js";
+import { createChangelogLoaderStrategy } from "./changelog/loader/index.js";
 
 export async function main(): Promise<void> {
 }
 
 async function parseInputs(): Promise<ReleaseMetadata> {
     const changelogType = getInput('changelog_type')
-    const changelogStrategy = createChangelogStrategy({
+    const changelogStrategy = createChangelogLoaderStrategy({
         changelog: getInput('changelog'),
         path: getInput('changelog_path')
     })
-    const changelog = await changelogStrategy.getChangelog()
+    const changelog = await changelogStrategy.loadChangelog()
     const name = getInput('name')
     const versionNumber = getInput('version_number')
     const releaseType = getInput('release_type')
