@@ -1,10 +1,10 @@
-import type {ChangelogStrategy} from "./strategy.js";
+import type {ChangelogLoaderStrategy} from "./strategy.js";
 
-export class DirectChangelogStrategy implements ChangelogStrategy {
+export class DirectChangelogStrategy implements ChangelogLoaderStrategy {
     constructor(private changelog: string) {
     }
 
-    async getChangelog(): Promise<string> {
+    async loadChangelog(): Promise<string> {
         return Promise.resolve(this.changelog);
     }
 }

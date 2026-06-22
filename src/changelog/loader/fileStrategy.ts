@@ -1,11 +1,11 @@
 import {readFile} from "node:fs/promises"
-import type {ChangelogStrategy} from "./strategy.js";
+import type {ChangelogLoaderStrategy} from "./strategy.js";
 
-export class FileChangelogStrategy implements ChangelogStrategy {
+export class FileChangelogStrategy implements ChangelogLoaderStrategy {
     constructor(private path: string) {
     }
 
-    async getChangelog(): Promise<string> {
+    async loadChangelog(): Promise<string> {
         try {
             return readFile(this.path, 'utf-8')
         } catch (e) {

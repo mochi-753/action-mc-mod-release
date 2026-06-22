@@ -1,3 +1,3 @@
-export interface ChangelogStrategy {
-    getChangelog(): Promise<string>
+export interface ChangelogLoaderStrategy {
+    loadChangelog(): Promise<string>
 }
