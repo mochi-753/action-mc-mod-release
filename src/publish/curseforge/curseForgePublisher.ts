@@ -5,7 +5,7 @@ import type {CurseForgeRequest} from "./curseforgeRequest.js";
 import type {Artifact} from "../buildArtifact.js";
 import {normalize} from "./curseforgeNormalizer.js";
 import {info} from "@actions/core";
-import {createChangelogConverter} from "../../changelog/converter/index.js";
+import {createChangelogConverterStrategy} from "../../changelog/converter/index.js";
 
 export class CurseForgePublisher implements Publisher {
     constructor(private client: CurseForgeClient) {
@@ -43,9 +43,9 @@ export class CurseForgePublisher implements Publisher {
         }
 
         if (curseforgeRequest.changelogType === 'markdown') {
-            const changelogConverter = createChangelogConverter({
-                rawChangelog: curseforgeRequest.changelog,
-                convertMode: 'MarkdownToHtml'
+            const changelogConverter = createChangelogConverterStrategy({
+                changelog: curseforgeRequest.changelog,
+                mode: 'MarkdownToHtml'
             })
 
             curseforgeRequest.changelogType = 'html'

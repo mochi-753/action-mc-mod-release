@@ -1,14 +1,12 @@
 import type {ChangelogConverterStrategy} from "./strategy.js";
 import {MarkdownChangelogConverterStrategy} from "./markdownStrategy.js";
+import type {ConvertMode} from "./mode.js";
 
-type ConvertMode = "MarkdownToHtml"
-
-export function createChangelogConverter(inputs: {
-    rawChangelog: string | Promise<string>,
-    convertMode: ConvertMode
-}): ChangelogConverterStrategy {
-    switch (inputs.convertMode) {
-        case "MarkdownToHtml":
-            return new MarkdownChangelogConverterStrategy(inputs.rawChangelog)
+export function createChangelogConverterStrategy(inputs: { changelog: string, mode?: ConvertMode }): ChangelogConverterStrategy {
+    switch (inputs.mode) {
+        case 'MarkdownToHtml':
+            return new MarkdownChangelogConverterStrategy(inputs.changelog)
+        default:
+            return {convert: async () => ''}
     }
 }
