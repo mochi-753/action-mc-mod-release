@@ -1,7 +1,7 @@
-import type {ChangelogConverter} from "./converter.js";
+import type {ChangelogConverterStrategy} from "./strategy.js";
 import {marked} from "marked";
 
-export class MarkdownChangelogConverter implements ChangelogConverter {
+export class MarkdownChangelogConverterStrategy implements ChangelogConverterStrategy {
     constructor(private rawChangelog: string | Promise<string>) {
     }
 
