@@ -1,0 +1,35 @@
+name: CodeQL Analyze
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '00 22 * * 2'
+
+permissions:
+  contents: read
+  security-events: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  codeql:
+    name: CodeQL Analyze
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.0
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4.36.2
+        with:
+          analysis-kinds: 'code-scanning'
+          languages: javascript-typescript
+          build-mode: none
+
+      - name: Perform CodeQL Analyze
+        uses: github/codeql-action/analyze@v4.36.2
