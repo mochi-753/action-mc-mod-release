@@ -1,10 +1,10 @@
 import type { InputLoaderStrategy } from "./strategy.js";
 
 export class DirectInputStrategy implements InputLoaderStrategy {
-    constructor(private direct: string) {
+    constructor(private readonly direct: string | Promise<string>) {
     }
 
     async loadInput(): Promise<string> {
-        return Promise.resolve(this.direct);
+        return Promise.resolve(await this.direct);
     }
 }
