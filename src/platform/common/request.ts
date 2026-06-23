@@ -2,7 +2,7 @@ import type { Metadata } from "./metadata.js";
 import type { Artifact } from "./artifact.js";
 
 export abstract class PlatformRequest {
-    constructor(protected readonly token: string, protected readonly userAgent: string) {
+    constructor(protected readonly token: string | Promise<string>, protected readonly userAgent?: string | Promise<string>) {
     }
 
     abstract buildPublishFormData(inputs: { metadata: Metadata, file: Artifact }): Promise<FormData>

@@ -33,8 +33,8 @@ export class CurseForgeRequest extends PlatformRequest {
         return {
             method: inputs.method,
             headers: {
-                'X-Api-Token': this.token,
-                'User-Agent': this.userAgent
+                'X-Api-Token': await this.token,
+                'User-Agent': await this.userAgent ?? ''
             },
             body: await inputs.formData ?? null
         }
