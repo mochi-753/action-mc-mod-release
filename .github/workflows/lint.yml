@@ -1,4 +1,4 @@
-name: Build
+name: Lint
 
 on:
   workflow_dispatch:
@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -29,11 +29,4 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v7.0.1
-        with:
-          path: dist/index.js
-          archive: false
-          retention-days: 7
+        run: npm run lint
