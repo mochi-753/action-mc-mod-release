@@ -6,6 +6,8 @@ export function createChangelogConverterStrategy(inputs: { changelog: string, mo
     switch (inputs.mode) {
         case 'MarkdownToHtml':
             return new MarkdownChangelogConverterStrategy(inputs.changelog)
+        case undefined:
+            return { convert: async () => '' }
         default:
             return { convert: async () => '' }
     }

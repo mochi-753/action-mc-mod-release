@@ -20,6 +20,7 @@ export class CurseForgePublisherStrategy implements PublisherStrategy {
         const curseforgeRequest = new CurseForgeRequest(this.token, this.userAgent)
         const curseforgeApiClient = new CurseForgeApiClient('https://minecraft.curseforge.com', await this.projectID)
 
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const formData = curseforgeRequest.buildPublishFormData({ metadata: inputs.metadata, file: inputs.files[0]! })
         const requestInit = curseforgeRequest.buildRequestInit({ method: 'POST', formData: formData })
 

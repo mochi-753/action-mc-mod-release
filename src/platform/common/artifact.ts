@@ -1,4 +1,4 @@
-export type Artifact = {
+export interface Artifact {
     fileName: string;
     file: Buffer;
 }

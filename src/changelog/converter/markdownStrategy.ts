@@ -7,9 +7,9 @@ export class MarkdownChangelogConverterStrategy implements ChangelogConverterStr
 
     async convert(): Promise<string> {
         try {
-            return marked.parse(await this.changelog)
+            return await marked.parse(await this.changelog);
         } catch (e) {
-            throw new Error(`The changelog could not be converted to HTML format. Changelog: ${await this.changelog}`)
+            throw new Error(`The changelog could not be converted to HTML format. Changelog: ${await this.changelog}`, { cause: e })
         }
     }
 }

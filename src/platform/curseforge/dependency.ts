@@ -1,4 +1,4 @@
-export type CurseForgeDependency = {
+export interface CurseForgeDependency {
     projects: [
         {
             slug: string;

@@ -7,9 +7,9 @@ export class PathInputStrategy implements InputLoaderStrategy {
 
     async loadInput(): Promise<string> {
         try {
-            return readFile(await this.path, 'utf-8')
+            return await readFile(await this.path, 'utf-8')
         } catch (e) {
-            throw new Error(`Failed to read file at ${await this.path}`)
+            throw new Error(`Failed to read file at ${await this.path}`, { cause: e })
         }
     }
 }
